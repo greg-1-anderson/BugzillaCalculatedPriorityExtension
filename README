@@ -1,0 +1,89 @@
+BUGZILLA CACLULATED PRIORITY EXTENSION
+--------------------------------------
+
+This extension has no user interface; it is a hard-coded implementation
+of a calculated value scheme for bugzilla.  It expects the following
+custom fields to be defined:
+
+cf_impact: (I)
+
+Blocker - Problems that prevent testing or development work
+High - Problems causing crashes, data loss, severe performance problems
+Normal - Broken or missing functionality
+Low - Improvement to existing code, e.g. performance enhancement
+Enhancement - New features
+
+cf_probability: (P)
+
+Seen by all or almost all users who use the feature (>=95% of users)
+Seen by more than 2/3 of the users who use the feature (>66% and <95%)
+Seen by about half the users who use the feature (>33% and <67%)
+Seen by about 1/3 of the users who use the feature (>5% and <34%)
+Seen by no or very few users who use the feature (<=5% of users)
+
+cf_defectclass: (D)
+
+Stability - Reliability; Availability; Testability; Security; Liability; Storage (data loss/corruption);
+Performance - Efficiency (use of resources: memory, disk, CPU); Scalability; Copyright
+Functionality - Logic or Calculation; Access Control; Compatibility; Interoperability
+Usability - Learnability; Readability; Documentation; Consistency; Workflow
+Typographic or grammatical - Aesthetics; Appearance or Cosmetic
+
+cf_workeffort: (W)
+
+Extensive analysis needed - > 1 week
+Above average analysis needed - < 1 week
+Normal analysis needed - < 3 days
+Minimal analysis needed - < 1 day
+No substantial analysis  needed - < 4 hours
+
+These custom fields must be entered into bugzilla via its UI.  Once
+these fields are available, this extension will automatically
+calculate the bug_severity and priority (the two fields labeled
+"Importance" in the UI) based on the following criteria.
+
+bug_severity:
+
+1 - (I*P*D) ==  0
+2 - (I*P*D) ==  1 - 4
+3 - (I*P*D) ==  6 - 12
+4 - (I*P*D) == 27 - 36
+5 - (I*P*D) >= 37
+
+The effect of this is that any of I, P or D are zero, then the severity
+will always be 1, and all of I, P and D must be large before the severity
+evaluates to 4 or 5.  If any of I, P or D are unset, then the bug_severity
+field can be set to any value from 1 - 5; otherwise, it will be forced
+to the value indicated by the calculation above.
+
+The resulting severity value feeds into the bug priority calculation; it
+is used together with the cf_workeffort field as an index into the
+two-dimensional priority lookup table:
+
+
+priority:
+
+            :    Work Effort
+            :
+            : 1   2   3   4   5
+------------+---+---+---+---+---
+          1 : *   *   *   1   1
+            +
+Severity  2 : *   *   *   2   2
+            +
+          3 : *   *   *   3   2
+  Level     +
+          4 : 5   4   4   4   3
+            +
+          5 : 5   5   4   4   3
+
+
+If the work effort is unset, or if the lookup table results in a "*",
+then the bug priority can be set to any value from 1 - 5; otherwise, it
+will be forced to the value indicated in the table.
+
+These rules can be changed by modifying the template that defines the
+lookup tables and field names; see:
+
+template/en/default/hook/bug/edit-after_custom_fields.html.tmpl
+

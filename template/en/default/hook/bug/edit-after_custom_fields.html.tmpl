@@ -1,0 +1,41 @@
+<script type="text/javascript" src="extensions/CalculatedPriority/web/js/calculated-values.js"></script>
+
+<script type="text/javascript">
+<!--
+
+// This is the matrix of calculated values for the 'priority' field.
+// The matrix cell is found by consulting the value of the 'severity' and 'cf_workeffort'
+// fields as the row and column selectors, respectively, as controlled by the
+// parameters to the showValueForCaculatedField call below.
+var decisionMatrix = 
+    [
+	[Number.NaN,Number.NaN,Number.NaN,Number.NaN,Number.NaN,Number.NaN],
+	[Number.NaN,Number.NaN,Number.NaN,Number.NaN,  1,  1],
+	[Number.NaN,Number.NaN,Number.NaN,Number.NaN,  2,  2],
+	[Number.NaN,Number.NaN,Number.NaN,Number.NaN,  3,  2],
+	[Number.NaN,  5,  4,  4,  4,  3],
+	[Number.NaN,  5,  5,  4,  4,  3]
+    ];
+
+[% SET controlled_field = 'priority' %]
+[% SET cont_ids = [] %]
+[% FOREACH val = bug_fields.$controlled_field.legal_values %]
+    [% cont_ids.push(val.id) %]
+[% END %]
+showValueForCaculatedField('priority', decisionMatrix, [[% cont_ids.join(',') FILTER js %]], 'bug_severity', 'cf_workeffort');
+
+// This is the limit list of calculated values for the 'bug_severity' field.
+// A calculation is made by multiplying the inputs, and then comparing the result against the
+// limit list.  The result is the index of the first item in the list found that is greater than
+// or equal to the product of the inputs.
+var decisionLimitList = [0,4,12,36,9999];
+
+[% SET controlled_field = 'bug_severity' %]
+[% SET cont_ids = [] %]
+[% FOREACH val = bug_fields.$controlled_field.legal_values %]
+    [% cont_ids.push(val.id) %]
+[% END %]
+showValueForProductField('bug_severity', decisionLimitList, [[% cont_ids.join(',') FILTER js %]], 'cf_impact', 'cf_probability', 'cf_defectclass');
+
+//-->
+</script>
