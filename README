@@ -85,5 +85,18 @@ will be forced to the value indicated in the table.
 These rules can be changed by modifying the template that defines the
 lookup tables and field names; see:
 
+template/en/default/hook/bug/create/create-end.html.tmpl
 template/en/default/hook/bug/edit-after_custom_fields.html.tmpl
+
+
+INSTALLATION
+------------
+
+Copy the CalculatedPriority directory to bugzilla/extensions.
+
+Optional:
+
+From the bugzilla root directory:
+
+patch -Np1 < extensions/CalculatedPriority/patch_4.0.2.patch
 

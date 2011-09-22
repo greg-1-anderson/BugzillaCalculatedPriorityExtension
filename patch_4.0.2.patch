@@ -1,0 +1,12 @@
+diff -Nupr bugzilla-4.0.1/template/en/default/bug/edit.html.tmpl bugzilla-4.0.1-custom//template/en/default/bug/edit.html.tmpl
+--- bugzilla-4.0.1/template/en/default/bug/edit.html.tmpl	2011-04-27 18:34:25.000000000 -0700
++++ bugzilla-4.0.1-custom//template/en/default/bug/edit.html.tmpl	2011-09-22 15:33:20.106972998 -0700
+@@ -432,7 +432,7 @@
+     <tr>
+       <td class="field_label">
+         <label for="priority" accesskey="i">
+-          <b><a href="page.cgi?id=fields.html#importance"><u>I</u>mportance</a></b></label>:
++          <b><a href="page.cgi?id=fields.html#priority"><u>P</u>riority</a></b></label> / <label for="bug_severity"><b><a href="page.cgi?id=fields.html#bug_severity">Severity</a></b></label>:
+       </td>
+       <td>
+        [% INCLUDE bug/field.html.tmpl

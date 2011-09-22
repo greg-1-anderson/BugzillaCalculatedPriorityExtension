@@ -1,0 +1,28 @@
+<script type="text/javascript" src="extensions/CalculatedPriority/web/js/calculated-values.js"></script>
+
+<script type="text/javascript">
+<!--
+
+// This is the limit list of calculated values for the 'bug_severity' field.
+// A calculation is made by multiplying the inputs, and then comparing the result against the
+// limit list.  The result is the index of the first item in the list found that is greater than
+// or equal to the product of the inputs.
+var decisionLimitList = [0,4,12,36,9999];
+
+[% SET controlled_field = 'bug_severity' %]
+[% SET cont_ids = [] %]
+[% FOREACH val = bug_fields.$controlled_field.legal_values %]
+    [% cont_ids.push(val.id) %]
+[% END %]
+showValueForProductField('bug_severity', decisionLimitList, [[% cont_ids.join(',') FILTER js %]], 'cf_impact', 'cf_probability', 'cf_defectclass');
+
+//-->
+</script>
+
+<style type="text/css">
+<!--
+#field_label_bug_severity, #field_container_bug_severity {
+  display: none;
+}
+-->
+</style>
